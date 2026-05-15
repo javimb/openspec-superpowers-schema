@@ -176,3 +176,6 @@ If any condition is missing, keep brainstorming. When all five are met:
 - The user **may also explicitly say** "open this as an opsx change".
 - Either way, **promotion requires a deliberate human ack** — never automatic.
 
+## License
+
+MIT - see [LICENSE](LICENSE)
