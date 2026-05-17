@@ -336,7 +336,7 @@ apply:
 
     1. **Workspace**: Use the Skill tool to invoke **superpowers:using-git-worktrees** to create an isolated git worktree for this change.
 
-    2. **Executor — subagent-driven-development**: Use the Skill tool to invoke **superpowers:subagent-driven-development** to execute the plan.md micro-tasks with fresh subagents per task.
+    2. **Executor — subagent-driven-development**: Use the Skill tool to invoke **superpowers:subagent-driven-development** to execute the plan.md micro-tasks with fresh subagents per task. The use of this skill is mandatory, never use an alternative approach even for simple tasks.
 
        Tell the executor:
        - Read plan.md in this change directory for micro-tasks
