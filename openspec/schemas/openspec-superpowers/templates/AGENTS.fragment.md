@@ -14,6 +14,9 @@ This repo uses [openspec-superpowers-schema](https://github.com/javimb/openspec-
 | User explicitly says bug fix / typo / config tweak / doc update  | Direct PR — **do NOT** open a change (see skip rules below)                                                                                                                     |
 | User is mid-change                                               | Advance with `/opsx:continue`, `/opsx:apply`, `/opsx:verify`, or `/opsx:archive`                                                                                                |
 
+### Leveraging superpowers:subagent-driven-development for implementation
+
+On `/opsx:apply`, always invoke **superpowers:subagent-driven-development** to execute the plan.md micro-tasks with fresh subagents per task. The use of this skill is mandatory, never use an alternative approach even for simple tasks. Avoid going directly to implmentation of task.md.
 
 ### When NOT to use opsx (direct PR)
 
