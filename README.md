@@ -6,7 +6,7 @@ Inspired by [JiangWay's superpowers-bridge](https://github.com/JiangWay/openspec
 
 ## What problem does this solve?
 
-OpenSpec governs **what to do** (artifact lifecycle: proposal / specs / tasks / verify / sync & archive, etc.). Superpowers governs **how to do it** (execution discipline: brainstorming, writing-plans, TDD, code review). Each is solid on its own; interleaving them in real development surfaces three structural problems:
+OpenSpec governs **what to do** (artifact lifecycle: proposal / specs / tasks / verify / sync &amp; archive, etc.). Superpowers governs **how to do it** (execution discipline: brainstorming, writing-plans, TDD, code review). Each is solid on its own; interleaving them in real development surfaces three structural problems:
 
 1. **Output duplication** — brainstorming writes design output to `docs/superpowers/specs/`; OpenSpec re-authors `proposal.md` / `design.md` in the change directory, with overlapping content.
 2. **Task fragmentation** — OpenSpec's `tasks.md` (coarse checkboxes) and Superpowers' `plan.md` (TDD micro-steps) describe the same work in different formats, locations, and progress trackers.
@@ -55,7 +55,7 @@ Upgrade the openspec-superpowers schema for OpenSpec in this project:
 1. Verify `openspec/schemas/openspec-superpowers/` already exists (this is an upgrade, not fresh install). If missing, abort and tell me to use the install instructions instead.
 2. Verify that the following Superpowers skills are available: brainstorming, writing-plans, using-git-worktrees, subagent-driven-development, finishing-a-development-branch.
 3. Clone https://github.com/javimb/openspec-superpowers-schema to a temp directory.
-4. Show me the diff between `openspec/schemas/openspec-superpowers/` from this project and `openspec/schemas/openspec-superpowers/` from the cloned repository (use `diff -ruN`). Wait for my ack before overwriting.
+4. Show me the diff between `openspec/schemas/openspec-superpowers/` from this project and `openspec/schemas/openspec-superpowers/` from the cloned repository. Wait for my ack before overwriting.
 5. After my ack, overwrite `openspec/schemas/openspec-superpowers/` in this project with `openspec/schemas/openspec-superpowers/` from the cloned repository.
 6. Run `openspec schema validate openspec-superpowers` to verify.
 7. If AGENTS.md (or equivalent) contains a workflow-routing section referencing openspec-superpowers, show me the diff between that section and the content of `openspec/schemas/openspec-superpowers/templates/AGENTS.fragment.md` from the cloned repo and follow the same ack pattern from steps 4 and 5. Otherwise, append the fragment as a new section.
