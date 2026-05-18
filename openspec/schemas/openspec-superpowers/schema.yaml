@@ -355,10 +355,10 @@ apply:
 
        Why now, not after PR: retrospective is part of this cycle's deliverables and should land in the same PR. Writing it after PR merge produces a separate trailing commit and loses the hot context (running tests, fresh fix memory).
 
-    5. **Archive (sync spec delta + move folder)**: After retrospective.md is written, run `openspec archive -y` (or invoke `/opsx:archive`). This:
+    5. **Completion (create a PR)**: After verification + retrospective are both done, use the Skill tool to invoke **superpowers:finishing-a-development-branch**. The branch's PR diff MUST contain the complete change cycle, including the generated artifacts. If it doesn't (e.g., because retrospective or verification was skipped), STOP and complete those first. This is the canonical opening sequence for the PR — do NOT reorder.
+
+    6. **Archive (sync spec delta + move folder)**: After PR has been created, ask the user to archive the change. Run `openspec archive -y` (or invoke `/opsx:archive`). This:
        - syncs delta specs from `openspec/changes/<name>/specs/` into `openspec/specs/<capability>/spec.md`
        - moves the change folder to `openspec/changes/archive/YYYY-MM-DD-<name>/`
 
-       The PR diff after archive contains the COMPLETE cycle state: all 8 artifacts done, spec synced into main specs, change under archive/.
-
-    6. **Completion (PR is the LAST step)**: After retrospective + archive are both done, use the Skill tool to invoke **superpowers:finishing-a-development-branch**. The branch's PR diff MUST contain the complete archived cycle. If it doesn't (e.g., because retrospective or archive was skipped), STOP and complete those first. This is the canonical opening sequence for the PR — do NOT reorder.
+       Then, commit the changes and push them. The PR diff after archive contains the COMPLETE cycle state: all 8 artifacts done, spec synced into main specs, change under archive/.
