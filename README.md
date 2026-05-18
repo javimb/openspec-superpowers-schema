@@ -77,26 +77,21 @@ brainstorm ──→ proposal ──→ specs ──→ tasks ──→ plan ─
 
 ```bash
 /opsx:new my-feature # → scaffolds new change
-/opsx:continue       # → brainstorm (interactive dialogue)
+/opsx:continue       # → brainstorm + design (interactive dialogue)
 /opsx:continue       # → proposal
-/opsx:continue       # → design
 /opsx:continue       # → specs
 /opsx:continue       # → tasks
 /opsx:continue       # → plan
-/opsx:apply          # → implementation: worktree + subagent-driven-development (TDD + code-review)
-/opsx:verify         # → evidence-based verification steps
-/opsx:continue       # → retrospective
-/opsx:archive        # → syncs specs, archives change and creates PR
+/opsx:apply          # → implementation with subagent-driven-development (TDD + code-review), evidence-based verification steps, retrospective and PR
+/opsx:archive        # → syncs specs and archives change, updates PR
 ```
 
 #### Quick flow
 
 ```bash
 /opsx:ff my-feature  # → one-shot: scaffold + brainstorm + proposal + design + specs + tasks + plan
-/opsx:apply          # → implementation: worktree + subagent-driven-development (TDD + code-review)
-/opsx:verify         # → evidence-based verification steps
-/opsx:continue       # → retrospective
-/opsx:archive        # syncs specs, archives change and creates PR
+/opsx:apply          # → implementation with subagent-driven-development (TDD + code-review), evidence-based verification steps, retrospective and PR
+/opsx:archive        # → syncs specs and archives change, updates PR
 ```
 
 ### Differences from OpenSpec's default `spec-driven` schema:
