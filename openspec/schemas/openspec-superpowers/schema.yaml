@@ -9,7 +9,7 @@ description: >
   
   Each artifact creation and apply step verifies its required Superpowers skills before invoking, and surfaces a clear error if any are missing.
 
-  Workflow: brainstorm → proposal / design → specs → tasks → plan → apply → verify → retrospective → PR
+  Workflow: brainstorm → design → proposal → specs → plan → apply → verify → retrospective → PR
   
   Apply phase uses git worktrees + subagent-driven-development, which brings TDD and code-review transitively.
 
@@ -40,29 +40,6 @@ artifacts:
       5. Output the validated design
     requires: []
 
-  - id: proposal
-    generates: proposal.md
-    description: Initial proposal document outlining the change
-    template: proposal.md
-    instruction: |
-      Create the proposal document based on the brainstorming output.
-
-      Read brainstorm.md for the validated design. Extract:
-      - **Why**: The motivation (from brainstorming discussion)
-      - **What Changes**: Specific changes agreed upon
-      - **Capabilities**: Identify which specs will be created or modified:
-        - **New Capabilities**: List capabilities being introduced. Each becomes a new `specs/<name>/spec.md`. Use kebab-case names (e.g., `user-auth`, `data-export`).
-        - **Modified Capabilities**: List existing capabilities whose REQUIREMENTS are changing. Only include if spec-level behavior changes (not just implementation details). Each needs a delta spec file. Check `openspec/specs/` for existing spec names. Leave empty if no requirement changes.
-      - **Impact**: Affected code, APIs, dependencies, or systems.
-
-      Since brainstorming already explored the problem space, this should be a concise extraction, not a new exploration.
-
-      IMPORTANT: The Capabilities section is critical. It creates the contract between proposal and specs phases. Research existing specs before filling this in. Each capability listed here will need a corresponding spec file.
-
-      Keep it concise (1-2 pages). Focus on the "why" not the "how" - implementation details belong in design.md.
-    requires:
-      - brainstorm
-
   - id: design
     generates: design.md
     description: Technical design document with implementation details
@@ -87,6 +64,31 @@ artifacts:
       Good design docs explain the "why" behind technical decisions.
     requires:
       - brainstorm
+
+  - id: proposal
+    generates: proposal.md
+    description: Initial proposal document outlining the change
+    template: proposal.md
+    instruction: |
+      Create the proposal document based on the brainstorming and design outputs.
+
+      Read brainstorm.md for the validated design and design.md for the technical approach. Extract:
+      - **Why**: The motivation (from brainstorming discussion)
+      - **What Changes**: Specific changes agreed upon
+      - **Capabilities**: Identify which specs will be created or modified:
+        - **New Capabilities**: List capabilities being introduced that don't fit any existing spec. Each becomes a new `specs/<name>/spec.md`. Use kebab-case names (e.g., `user-auth`, `data-export`). If the change extends an existing spec, use Modified Capabilities instead.
+        - **Modified Capabilities**: List existing capabilities whose REQUIREMENTS are changing. Only include if spec-level behavior changes (not just implementation details). Each needs a delta spec file. Check `openspec/specs/` for existing spec names. Leave empty if no requirement changes.
+      - **Impact**: Affected code, APIs, dependencies, or systems. Draw the technical scope from design.md's Decisions, Risks / Trade-offs, and Migration Plan sections.
+
+      Since brainstorming and design already explored the problem space and technical approach, this should be a concise extraction, not a new exploration.
+
+      IMPORTANT: The Capabilities section is critical: it creates the contract between proposal and specs phases. Each capability listed here will need a corresponding spec file.
+      High specs granularity shall be avoided: research existing specs before filling this in and only create a new capability/spec when the change doesn't fit in an existing one.
+
+      Keep it concise (1-2 pages). Focus on the "why" not the "how" — the "how" lives in design.md, which is already written; reference it rather than restating it.
+    requires:
+      - brainstorm
+      - design
 
   - id: specs
     generates: "specs/**/*.md"
@@ -128,25 +130,6 @@ artifacts:
       - proposal
       - design
 
-  - id: tasks
-    generates: tasks.md
-    description: Implementation checklist with trackable tasks
-    template: tasks.md
-    instruction: |
-      Create the task list that breaks down the implementation work.
-
-      **IMPORTANT: Follow the template below exactly.** The apply phase parses checkbox format to track progress. Tasks not using `- [ ]` won't be tracked.
-
-      Guidelines:
-      - Group related tasks under ## numbered headings
-      - Each task MUST be a checkbox: `- [ ] X.Y Task description`
-      - Tasks should be small enough to complete in one session
-      - Order tasks by dependency (what must be done first?)
-
-      Reference specs for what needs to be built. If design.md exists, reference it for how to build it — but design is optional (see openspec-conventions: design.md is only for changes that need to explain non-trivial technical decisions).
-    requires:
-      - specs
-
   - id: plan
     generates: plan.md
     description: Micro-task implementation plan using Superpowers writing-plans
@@ -163,14 +146,18 @@ artifacts:
       - Do NOT write to `docs/superpowers/plans/`. Instead, write the plan directly to this change's `plan.md`.
 
       The writing-plans skill will:
-      1. Read the tasks.md and design.md for context
-      2. Break each task into 2-5 minute micro-steps (TDD style)
+      1. Read the specs, design.md, and proposal.md for context
+      2. Break the work into 2-5 minute micro-steps (TDD style)
       3. Include exact file paths, code snippets, test commands
       4. Add commit points after each task
 
-      Pass the tasks.md content to the skill as the input for decomposition. The plan should reference the specs and design artifacts in this change directory.
+      Pass the specs (WHAT to build), design.md (HOW to build it), and proposal.md (the full scope of What Changes and Impact) to the skill as the input for decomposition. Review proposal.md's "What Changes" and "Impact" sections to ensure the plan captures EVERY task the change requires — including work that is scoped in the proposal but not fully elaborated in the specs or design (e.g. migration steps, dependency updates, affected-system touchpoints). Cross-check the derived task list against proposal.md so nothing in the agreed scope is dropped.
+
+      plan.md is the sole implementation checklist and progress ledger — its `- [ ]` checkboxes are what the apply phase tracks and verify audits, so every unit of work MUST be a checkbox.
     requires:
-      - tasks
+      - proposal
+      - specs
+      - design
 
   - id: verify
     generates: verify.md
@@ -183,7 +170,7 @@ artifacts:
 
       1. Commit evidence (must return > 0): `git log --oneline $(git merge-base HEAD origin/main 2>/dev/null || git merge-base HEAD origin/master 2>/dev/null)..HEAD | wc -l`
 
-      2. Task progress (must return > 0): `grep -c '^- \[x\]' openspec/changes/<change-name>/tasks.md`
+      2. Task progress (must return > 0): `grep -c '^- \[x\]' openspec/changes/<change-name>/plan.md`
 
       Only after BOTH return positive numbers, proceed to invoke the verification skill below.
 
@@ -195,7 +182,7 @@ artifacts:
 
       1. **Structural validation**: Run `openspec validate --all --json` in the repository root and confirm every item returns `"valid": true`. If any item fails, record the issues and return to fix the underlying artifact before proceeding.
 
-      2. **Task completion**: Confirm every checkbox in tasks.md is `- [x]`. For any `- [ ]` remaining, document the reason (e.g. manual / out-of-scope / blocked) and whether it blocks archive.
+      2. **Task completion**: Confirm every checkbox in plan.md is `- [x]`. For any `- [ ]` remaining, document the reason (e.g. manual / out-of-scope / blocked) and whether it blocks archive.
 
       3. **Delta spec sync state**: For each directory under `openspec/changes/<name>/specs/`, compare against the corresponding `openspec/specs/<capability>/spec.md` and record one of:
          - ✓ Already synced
@@ -255,7 +242,7 @@ artifacts:
 
       1. **Gather evidence**
          - Run `git log --oneline <base>..HEAD` in the change worktree (or main checkout if the worktree was already merged) to get the commit range.
-         - Read brainstorm.md, plan.md, tasks.md in this change directory for plan-vs-actual comparison
+         - Read brainstorm.md, plan.md in this change directory for plan-vs-actual comparison
          - If verify.md contains failing items, address them BEFORE writing the retro
 
       2. **Write the retrospective sections** 
@@ -264,7 +251,7 @@ artifacts:
 
          The retrospective has §0 Evidence (quantitative front-matter) plus 6 analysis sections (§1–§6). Downstream analysis bullets reference §0 instead of inlining `[evidence: commit X]` per line.
 
-         §0) **Evidence** — quantitative front-matter populated from `git log <base>..HEAD`, `tasks.md`, and verify.md: commit count, diff size (lines/files), tasks-done ratio, active hours, subagent dispatch count, new external dependencies, post-merge bugs, OpenSpec validate state at archive, test coverage signal, and a one-line commit chain.
+         §0) **Evidence** — quantitative front-matter populated from `git log <base>..HEAD`, `plan.md`, and verify.md: commit count, diff size (lines/files), tasks-done ratio, active hours, subagent dispatch count, new external dependencies, post-merge bugs, OpenSpec validate state at archive, test coverage signal, and a one-line commit chain.
 
          §1) **Wins** — what worked well, with evidence
 
@@ -320,7 +307,7 @@ artifacts:
 
 apply:
   requires: [plan]
-  tracks: tasks.md
+  tracks: plan.md
   instruction: |
     PRECHECK — required skill availability:
     Before invoking, confirm all the following skill appear in your available skills list:
@@ -340,8 +327,14 @@ apply:
 
        Tell the executor:
        - Read plan.md in this change directory for micro-tasks
-       - Update tasks.md checkboxes as coarse tasks complete
        - Work within the created worktree
+       - Track progress by flipping plan.md checkboxes per task, per the rule below
+
+       Per-task checkbox tracking:
+       At subagent-driven-development's "Complete the task" step — where you append a task's `Task <N>: complete` line to the SDD ledger after its review passes (or its findings are parked with rulings at the cap) — also flip every `- [ ]` under that task's `## Task <N>` heading to `- [x]` and commit them as `chore(plan): check off Task <N>`. A dispatch batched across several `## Task` sections flips every box in all sections it covered.
+       - Flip after review, never on the implementer's DONE alone: a checked box means done AND reviewed — the state verify audits.
+       - One commit per task, as each review passes. A single end-of-run batch flip makes plan.md a dead progress signal for the whole run: `openspec list` and anyone reading plan.md see zero tasks done mid-implementation, and a compacted or interrupted session cannot recover its place from it (the SDD ledger it would otherwise fall back on is git-ignored session-local scratch).
+       - You (the controller) own this commit — the implementer's reviewed commits are already made. If a pre-commit formatter rewrites plan.md, re-stage and commit.
 
        IMPORTANT — transitive skill activation: subagent-driven-development internally enforces the following skills, so you do NOT need to invoke them manually:
        - **superpowers:test-driven-development** — every task follows RED-GREEN-REFACTOR. Implementation code written before a failing test is deleted.
@@ -357,7 +350,20 @@ apply:
 
     5. **Completion (create a PR)**: After verification + retrospective are both done, use the Skill tool to invoke **superpowers:finishing-a-development-branch**. The branch's PR diff MUST contain the complete change cycle, including the generated artifacts. If it doesn't (e.g., because retrospective or verification was skipped), STOP and complete those first. This is the canonical opening sequence for the PR — do NOT reorder.
 
-    6. **Archive (sync spec delta + move folder)**: After PR has been created, ask the user to archive the change. Run `openspec archive -y` (or invoke `/opsx:archive`). This:
+    6. **Promote learnings**: After the PR is created and before archiving, walk the user through each unchecked `- [ ]` item under the retrospective's §6 "Promote candidates → long-term learning" section. For each candidate, one at a time:
+       - Present the candidate's title + one-sentence learning, its proposed destination (the `→ **Promote to**` line), and its `> **Why**` / `> **How to apply**` body lines.
+       - Ask the user whether to apply the suggestion. Do NOT apply a candidate without explicit user confirmation.
+       - If the user confirms, perform the promotion to the stated destination:
+         - **memory** → write a memory file following the memory schema (Why / How to apply map to the feedback memory body)
+         - **AGENTS.md** → add the guidance to AGENTS.md
+         - **schema** → edit this schema
+         - **skill** → create or update the relevant skill
+         - **one-off** → no durable action; acknowledge and move on
+       - When a candidate is applied, check its `- [ ]` box in retrospective.md. Leave any deferred or declined candidate unchecked so it carries into the next cycle's retro for re-evaluation.
+
+       If §6 has no unchecked candidates, note that and continue. This step gates archive: the retrospective's promote candidates MUST be reviewed with the user before the change folder is moved.
+
+    7. **Archive (sync spec delta + move folder)**: After PR has been created, ask the user to archive the change. Run `openspec archive -y` (or invoke `/opsx:archive`). This:
        - syncs delta specs from `openspec/changes/<name>/specs/` into `openspec/specs/<capability>/spec.md`
        - moves the change folder to `openspec/changes/archive/YYYY-MM-DD-<name>/`
 

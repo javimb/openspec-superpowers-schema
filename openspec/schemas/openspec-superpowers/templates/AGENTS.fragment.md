@@ -16,7 +16,7 @@ This repo uses [openspec-superpowers-schema](https://github.com/javimb/openspec-
 
 ### Leveraging superpowers:subagent-driven-development for implementation
 
-On `/opsx:apply`, always invoke **superpowers:subagent-driven-development** to execute the plan.md micro-tasks with fresh subagents per task. The use of this skill is mandatory, never use an alternative approach even for simple tasks. Avoid going directly to implmentation of task.md.
+On `/opsx:apply`, always invoke **superpowers:subagent-driven-development** to execute the plan.md micro-tasks with fresh subagents per task. The use of this skill is mandatory, never use an alternative approach even for simple tasks. Avoid going directly to implmentation of plan.md.
 
 ### When NOT to use opsx (direct PR)
 

@@ -23,20 +23,20 @@
 If any items failed, list id + issues:
 
 | Item | Type | Issues |
-|---|---|---|
-| — | — | — |
+| ---- | ---- | ------ |
+| —    | —    | —      |
 
 ---
 
-## 2. Task Completion (`tasks.md`)
+## 2. Task Completion (`plan.md`)
 
 - [ ] All `- [ ]` have become `- [x]`
 
 **Incomplete tasks** (if any):
 
 | Task | Reason not done | Blocking archive? |
-|---|---|---|
-| — | — | — |
+| ---- | --------------- | ----------------- |
+| —    | —               | —                 |
 
 ---
 
@@ -45,9 +45,9 @@ If any items failed, list id + issues:
 For each capability directory under `openspec/changes/<name>/specs/`, compare
 against `openspec/specs/<capability>/spec.md`:
 
-| Capability | Sync status | Notes |
-|---|---|---|
-| — | ✓ synced / ✗ pending sync / N/A | — |
+| Capability | Sync status                     | Notes |
+| ---------- | ------------------------------- | ----- |
+| —          | ✓ synced / ✗ pending sync / N/A | —     |
 
 ---
 
@@ -57,8 +57,8 @@ Spot-check whether decisions in `design.md` are reflected in the Requirements
 and Scenarios of `specs/*.md`:
 
 | Sample item | design description | specs counterpart | Gap |
-|---|---|---|---|
-| — | — | — | — |
+| ----------- | ------------------ | ----------------- | --- |
+| —           | —                  | —                 | —   |
 
 **Drift warnings** (non-blocking):
 
@@ -92,8 +92,8 @@ ls docs/superpowers/specs/*.md 2>/dev/null
 **Leak list** (if any):
 
 | File | Content already captured in change? | Suggested action |
-|---|---|---|
-| — | — | — |
+| ---- | ----------------------------------- | ---------------- |
+| —    | —                                   | —                |
 
 > This won't block archive. Leaks produced after a new schema-installed cycle
 > should be moved into `openspec/changes/<name>/brainstorm.md` or `design.md`,
@@ -108,10 +108,10 @@ equivalent automated test coverage. If no equivalent automated test exists, that
 item should be treated as a **genuine gap** rather than a reasonable deferral,
 and should be recorded in the retrospective Misses.
 
-| Deferred dogfood (plan §) | Equivalent automated test | Coverage assessment | Genuine gap? |
-|---|---|---|---|
+| Deferred dogfood (plan §)                       | Equivalent automated test                                 | Coverage assessment                                       | Genuine gap?           |
+| ----------------------------------------------- | --------------------------------------------------------- | --------------------------------------------------------- | ---------------------- |
 | e.g. §11.3 `compose up + curl /actuator/health` | `LinebcIntegrationApplicationTests` (Testcontainers, 24s) | Spring context boot + Flyway migration + main bean wiring | ❌ equivalently covered |
-| — | — | — | — |
+| —                                               | —                                                         | —                                                         | —                      |
 
 > **Interpretation rules**:
 > - "Equivalent" = the automated test's assertion set is a superset of the manual dogfood's expected assertions

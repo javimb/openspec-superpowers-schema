@@ -9,11 +9,11 @@
 ## 0. Evidence
 
 > Quantitative baseline data — subsequent Wins / Misses bullets reference these, avoiding repeated [evidence: ...] per line.
-> For cold-write scenarios (retro written well after the cycle ends), using only `git log` + `tasks.md` + commit messages should still allow reconstructing this section.
+> For cold-write scenarios (retro written well after the cycle ends), using only `git log` + `plan.md` + commit messages should still allow reconstructing this section.
 
 - **Commit range**: `<base-sha>..<head-sha>` (<n> commits)
 - **Diff size**: <+X / -Y lines across N files>
-- **Tasks done**: <x>/<y> (`grep -cE '^\s*- \[x\]' tasks.md` → x; regex tolerates sub-task indentation)
+- **Tasks done**: <x>/<y> (`grep -cE '^\s*- \[x\]' plan.md` → x; regex tolerates sub-task indentation)
 - **Active hours**: <estimate>
 - **Subagent dispatches**: <count or "n/a">
 - **New external dependencies**: <list, with license + version, or "none">
@@ -44,13 +44,13 @@ Commit chain (chronological):
 ## 3. Plan deviations
 
 | Plan task | What changed | Why |
-|-----------|--------------|-----|
+| --------- | ------------ | --- |
 | 1.2       | ...          | ... |
 
 ## 4. Skill / workflow compliance
 
 | Skill                                            | Used |
-|--------------------------------------------------|------|
+| ------------------------------------------------ | ---- |
 | superpowers:brainstorming                        |      |
 | superpowers:writing-plans                        |      |
 | superpowers:using-git-worktrees                  |      |

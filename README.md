@@ -66,7 +66,7 @@ Upgrade the openspec-superpowers schema for OpenSpec in this project:
 ## Workflow
 
 ```text
-brainstorm ──→ proposal ──→ specs ──→ tasks ──→ plan ──→ apply ──→ verify ──→ retrospective ──→ PR
+brainstorm ──→ proposal ──→ specs ──→ plan ──→ apply ──→ verify ──→ retrospective ──→ PR
            │               ↑
            └─→ design ─────┘
 ```
@@ -80,7 +80,6 @@ brainstorm ──→ proposal ──→ specs ──→ tasks ──→ plan ─
 /opsx:continue       # → brainstorm + design (interactive dialogue)
 /opsx:continue       # → proposal
 /opsx:continue       # → specs
-/opsx:continue       # → tasks
 /opsx:continue       # → plan
 /opsx:apply          # → implementation with subagent-driven-development (TDD + code-review), evidence-based verification steps, retrospective and PR
 /opsx:archive        # → syncs specs and archives change, updates PR
@@ -89,7 +88,7 @@ brainstorm ──→ proposal ──→ specs ──→ tasks ──→ plan ─
 #### Quick flow
 
 ```bash
-/opsx:ff my-feature  # → one-shot: scaffold + brainstorm + proposal + design + specs + tasks + plan
+/opsx:ff my-feature  # → one-shot: scaffold + brainstorm + proposal + design + specs + plan
 /opsx:apply          # → implementation with subagent-driven-development (TDD + code-review), evidence-based verification steps, retrospective and PR
 /opsx:archive        # → syncs specs and archives change, updates PR
 ```
@@ -100,7 +99,7 @@ brainstorm ──→ proposal ──→ specs ──→ tasks ──→ plan ─
 |             | spec-driven                                | openspec-superpowers                                                                                                                   |
 | ----------- | ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------- |
 | Entry point | Generates proposal.md                      | Generates **brainstorm.md** (invoking Superpowers' brainstorming skill)                                                                |
-| Plan        | Generates tasks.md (coarse)                | Generates tasks.md + **plan.md** (TDD micro-steps)                                                                                     |
+| Plan        | Generates tasks.md (coarse)                | Generates **plan.md** (TDD micro-steps)                                                                                                 |
 | Apply       | Standard task-by-task in a single context. | Using Superpowers' **worktree + subagent-driven-development** (with TDD + code-review transitive + fresh context for each task) skills |
 | Post-apply  | None                                       | Generates **verify.md** + **retrospective.md**, creates PR                                                                             |
 
