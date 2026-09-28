@@ -11,7 +11,7 @@ The entire schema is `openspec/schemas/openspec-superpowers/schema.yaml` and its
 ### Structure
 
 - `openspec/schemas/openspec-superpowers/schema.yaml` — single source of truth; defines artifacts, templates, instructions, and dependency chain
-- `openspec/schemas/openspec-superpowers/templates/` — scaffold files for each artifact type (proposal.md, spec.md, design.md, tasks.md)
+- `openspec/schemas/openspec-superpowers/templates/` — scaffold files for each artifact type (proposal.md, spec.md, design.md, plan.md)
 
 ### Validation
 
