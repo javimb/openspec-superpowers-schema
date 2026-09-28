@@ -161,7 +161,7 @@ artifacts:
 
   - id: verify
     generates: verify.md
-    description: Post-implementation verification against specs, design, and tasks
+    description: Post-implementation verification against specs, design, and plan
     template: verify.md
     instruction: |
       PRECHECK — implementation evidence:
@@ -367,4 +367,4 @@ apply:
        - syncs delta specs from `openspec/changes/<name>/specs/` into `openspec/specs/<capability>/spec.md`
        - moves the change folder to `openspec/changes/archive/YYYY-MM-DD-<name>/`
 
-       Then, commit the changes and push them. The PR diff after archive contains the COMPLETE cycle state: all 8 artifacts done, spec synced into main specs, change under archive/.
+       Then, commit the changes and push them. The PR diff after archive contains the COMPLETE cycle state: all 7 artifacts done, spec synced into main specs, change under archive/.

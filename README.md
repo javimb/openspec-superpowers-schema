@@ -66,9 +66,7 @@ Upgrade the openspec-superpowers schema for OpenSpec in this project:
 ## Workflow
 
 ```text
-brainstorm ──→ proposal ──→ specs ──→ plan ──→ apply ──→ verify ──→ retrospective ──→ PR
-           │               ↑
-           └─→ design ─────┘
+brainstorm ──→ design ──→ proposal ──→ specs ──→ plan ──→ apply ──→ verify ──→ retrospective ──→ PR
 ```
 
 ### Usage
